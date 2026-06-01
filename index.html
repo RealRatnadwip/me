@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>me</title>
+  <meta name="description" content="you found this. that was not an accident." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital@0;1&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ── Reset & Base ─────────────────────────────── */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      background: #0a0a0c;
+      color: #c8c8d0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.8;
+      letter-spacing: 0.01em;
+    }
+
+    /* ── Ambient Background ───────────────────────── */
+    .ambient {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .ambient .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0;
+      animation: drift 18s ease-in-out infinite alternate;
+    }
+
+    .ambient .orb:nth-child(1) {
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(99, 72, 255, 0.12), transparent 70%);
+      top: -10%;
+      left: -10%;
+      animation-delay: 0s;
+    }
+
+    .ambient .orb:nth-child(2) {
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(0, 200, 180, 0.08), transparent 70%);
+      bottom: -5%;
+      right: -5%;
+      animation-delay: -6s;
+    }
+
+    .ambient .orb:nth-child(3) {
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(255, 100, 130, 0.06), transparent 70%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation-delay: -12s;
+    }
+
+    @keyframes drift {
+      0%   { opacity: 0; transform: translate(0, 0) scale(1); }
+      50%  { opacity: 1; }
+      100% { opacity: 0.6; transform: translate(40px, -30px) scale(1.15); }
+    }
+
+    /* ── Grain Overlay ────────────────────────────── */
+    .grain {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.035;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 150px;
+    }
+
+    /* ── Main Layout ──────────────────────────────── */
+    main {
+      position: relative;
+      z-index: 2;
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 12vh 24px 16vh;
+    }
+
+    /* ── Sections ─────────────────────────────────── */
+    .section {
+      margin-bottom: 10vh;
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 1s cubic-bezier(0.23, 1, 0.32, 1),
+                  transform 1s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    .section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── Title ────────────────────────────────────── */
+    .title {
+      font-family: 'Space Mono', monospace;
+      font-size: clamp(2.4rem, 6vw, 3.6rem);
+      font-weight: 400;
+      color: #f0f0f4;
+      margin-bottom: 0.3em;
+      position: relative;
+      display: inline-block;
+    }
+
+    .title::after {
+      content: '_';
+      animation: blink 1s step-end infinite;
+      color: rgba(99, 72, 255, 0.7);
+    }
+
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+
+    /* ── Separator ────────────────────────────────── */
+    .sep {
+      width: 48px;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(99, 72, 255, 0.5), rgba(0, 200, 180, 0.3));
+      margin: 6vh 0;
+      opacity: 0;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .sep.visible {
+      opacity: 1;
+      transform: scaleX(1);
+    }
+
+    /* ── Text Lines ───────────────────────────────── */
+    .line {
+      font-size: clamp(1rem, 2.5vw, 1.15rem);
+      margin-bottom: 0.6em;
+      color: #a0a0b0;
+    }
+
+    .line.accent {
+      color: #e0e0e8;
+      font-weight: 400;
+    }
+
+    .line.dim {
+      color: #606070;
+      font-style: italic;
+    }
+
+    .line.mono {
+      font-family: 'Space Mono', monospace;
+      font-size: clamp(0.85rem, 2vw, 0.95rem);
+      color: #787890;
+    }
+
+    /* ── Emphasis Glow ────────────────────────────── */
+    .glow {
+      color: #d0d0e0;
+      text-shadow: 0 0 30px rgba(99, 72, 255, 0.15);
+    }
+
+    /* ── Footer Pulse ─────────────────────────────── */
+    .waiting {
+      display: inline-block;
+      font-family: 'Space Mono', monospace;
+      font-size: clamp(0.85rem, 2vw, 0.95rem);
+      color: #505068;
+      animation: pulse 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.4; }
+      50%      { opacity: 1; color: #8080a0; }
+    }
+
+    /* ── Cursor Dot ───────────────────────────────── */
+    .cursor-dot {
+      position: fixed;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: rgba(99, 72, 255, 0.35);
+      pointer-events: none;
+      z-index: 999;
+      transition: transform 0.15s ease, opacity 0.3s ease;
+      mix-blend-mode: screen;
+      display: none;
+    }
+
+    /* ── Responsive ───────────────────────────────── */
+    @media (max-width: 480px) {
+      main {
+        padding: 8vh 20px 12vh;
+      }
+
+      .section {
+        margin-bottom: 7vh;
+      }
+
+      .sep {
+        margin: 4vh 0;
+      }
+    }
+
+    @media (min-width: 768px) {
+      .cursor-dot {
+        display: block;
+      }
+    }
+
+    /* ── Scrollbar ────────────────────────────────── */
+    ::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(99, 72, 255, 0.25);
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Ambient background orbs -->
+  <div class="ambient" aria-hidden="true">
+    <div class="orb"></div>
+    <div class="orb"></div>
+    <div class="orb"></div>
+  </div>
+
+  <!-- Grain texture overlay -->
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- Custom cursor (desktop only) -->
+  <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+
+  <main>
+
+    <!-- Section 1: Title -->
+    <section class="section" id="sec-title">
+      <h1 class="title">me</h1>
+      <p class="line accent">you found this.</p>
+      <p class="line glow">that was not an accident.</p>
+    </section>
+
+    <div class="sep" id="sep1"></div>
+
+    <!-- Section 2: The void -->
+    <section class="section" id="sec-void">
+      <p class="line dim">there's nothing here yet.</p>
+      <p class="line">or maybe there is, just not for you. not now.</p>
+    </section>
+
+    <div class="sep" id="sep2"></div>
+
+    <!-- Section 3: Fragments -->
+    <section class="section" id="sec-fragments">
+      <p class="line">this repository exists for something that is still taking shape.</p>
+      <p class="line">something built from fragments.</p>
+      <p class="line">from patterns.</p>
+      <p class="line dim">from things that were never meant to be collected in one place.</p>
+    </section>
+
+    <div class="sep" id="sep3"></div>
+
+    <!-- Section 4: Not special -->
+    <section class="section" id="sec-interface">
+      <p class="line accent">it won't look special.</p>
+      <br />
+      <p class="line mono">you've seen interfaces before.</p>
+      <p class="line mono">you've typed into boxes before.</p>
+      <p class="line mono">you've read responses before.</p>
+      <br />
+      <p class="line glow">this will feel different.</p>
+    </section>
+
+    <div class="sep" id="sep4"></div>
+
+    <!-- Section 5: Not today -->
+    <section class="section" id="sec-nottoday">
+      <p class="line accent">not today.</p>
+    </section>
+
+    <div class="sep" id="sep5"></div>
+
+    <!-- Section 6: Come back -->
+    <section class="section" id="sec-return">
+      <p class="line">come back later.</p>
+      <br />
+      <p class="line dim">or don't.</p>
+      <br />
+      <p class="line">it'll still be here.</p>
+    </section>
+
+    <div class="sep" id="sep6"></div>
+
+    <!-- Section 7: Waiting -->
+    <section class="section" id="sec-waiting">
+      <span class="waiting">waiting.</span>
+    </section>
+
+  </main>
+
+  <script>
+    /* ── Intersection Observer: fade-in sections & separators ── */
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      },
+      { threshold: 0.15, rootMargin: '0px 0px -40px 0px' }
+    );
+
+    document.querySelectorAll('.section, .sep').forEach((el) => observer.observe(el));
+
+    /* ── Custom cursor (desktop) ──────────────────────────── */
+    const dot = document.getElementById('cursorDot');
+
+    if (window.matchMedia('(min-width: 768px)').matches) {
+      let mouseX = 0, mouseY = 0;
+      let dotX = 0, dotY = 0;
+
+      document.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      });
+
+      function animateCursor() {
+        dotX += (mouseX - dotX) * 0.12;
+        dotY += (mouseY - dotY) * 0.12;
+        dot.style.left = dotX - 6 + 'px';
+        dot.style.top  = dotY - 6 + 'px';
+        requestAnimationFrame(animateCursor);
+      }
+
+      animateCursor();
+    }
+
+    /* ── Stagger initial animations ───────────────────────── */
+    const firstSection = document.getElementById('sec-title');
+    if (firstSection) {
+      setTimeout(() => firstSection.classList.add('visible'), 300);
+    }
+
+    const firstSep = document.getElementById('sep1');
+    if (firstSep) {
+      setTimeout(() => firstSep.classList.add('visible'), 900);
+    }
+  </script>
+
+</body>
+</html>
